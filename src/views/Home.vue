@@ -2,7 +2,7 @@
 <template>
   <div class="home">
     <h1>Punto Pádel</h1>
-    <p>Encontrá canchas y reservá tu turno chiarettaaaaaa</p>
+    <p>Encontrá canchas y reservá tu turno</p>
   </div>
 </template>
 
