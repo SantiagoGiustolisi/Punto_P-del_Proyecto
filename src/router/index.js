@@ -1,34 +1,23 @@
-// src/router/index.js
 import { createRouter, createWebHistory } from "vue-router";
 
-// Vistas reales
 import Home from "../views/Home.vue";
 import Canchas from "../views/Canchas.vue";
+import Reservar from "../views/Reservar.vue";
+import MisReservas from "../views/MisReservas.vue";
 import Login from "../views/Login.vue";
 
-// (Opcional) Si más adelante creás estas vistas, reemplazás los placeholders.
-// import CanchaDetalle from "../views/CanchaDetalle.vue";
-// import Reservar from "../views/Reservar.vue";
-
 const routes = [
-  // Entrada del sitio => Login
-  { path: "/", redirect: "/login" },
-
-  // Login
+  // Login (pública)
   { path: "/login", name: "login", component: Login },
 
-  // Home (protegida)
-  { path: "/home", name: "home", component: Home },
-
-  // Canchas (protegida)
+  // App (protegidas)
+  { path: "/", name: "home", component: Home },
   { path: "/canchas", name: "canchas", component: Canchas },
+  { path: "/reservar", name: "reservar", component: Reservar },
+  { path: "/mis-reservas", name: "mis-reservas", component: MisReservas },
 
-  // Placeholders para no romper botones (por ahora apuntan a Home)
-  { path: "/canchas/:id", name: "cancha-detalle", component: Home },
-  { path: "/reservar", name: "reservar", component: Home },
-
-  // Si cae en cualquier ruta desconocida:
-  { path: "/:pathMatch(.*)*", redirect: "/login" },
+  // fallback
+  { path: "/:pathMatch(.*)*", redirect: "/" },
 ];
 
 const router = createRouter({
@@ -36,33 +25,24 @@ const router = createRouter({
   routes,
 });
 
-/**
- * Guard simple de autenticación (DEMO)
- * - Si no hay sesión, no deja entrar a rutas protegidas
- * - Si ya hay sesión, no deja volver a /login
- *
- * ¿Dónde está la sesión?
- * - La guardamos en localStorage como "pp_session" desde Login.vue
- */
 router.beforeEach((to) => {
+  // ✅ elegí UNA sola variable para auth:
+  // Si tu login guarda "pp_session", dejalo así.
+  // Si guarda token, cambiá a "pp_token".
   const session = localStorage.getItem("pp_session");
   const isLogged = !!session;
 
-  // Rutas públicas
-  const publicRoutes = ["/login"];
-  const isPublic = publicRoutes.includes(to.path);
+  const publicRoutes = ["login"];
+  const isPublic = publicRoutes.includes(to.name);
 
-  // Si NO está logueado y quiere ir a una ruta NO pública => login
   if (!isLogged && !isPublic) {
-    return "/login";
+    return { name: "login" };
   }
 
-  // Si está logueado y quiere ir a login => home
-  if (isLogged && to.path === "/login") {
-    return "/home";
+  if (isLogged && to.name === "login") {
+    return { name: "home" }; // ✅ existe
   }
 
-  // seguir normal
   return true;
 });
 
