@@ -1,22 +1,20 @@
-// src/router/index.js
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from "vue-router";
 
-// vistas (por ahora las creamos después)
+import Home from "../views/Home.vue";
+import Canchas from "../views/Canchas.vue";
+
 const routes = [
-  {
-    path: '/',
-    redirect: '/home',
-  },
-  {
-    path: '/home',
-    name: 'Home',
-    component: () => import('../views/Home.vue'),
-  },
-]
+  { path: "/", name: "home", component: Home },
+  { path: "/canchas", name: "canchas", component: Canchas },
+
+  // placeholders para no romper los botones (después las hacemos)
+  { path: "/canchas/:id", name: "cancha-detalle", component: Home },
+  { path: "/reservar", name: "reservar", component: Home },
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-})
+});
 
-export default router
+export default router;
