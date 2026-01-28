@@ -5,18 +5,18 @@
       <header class="head">
         <div class="logo">PP</div>
         <div>
-          <h1>Ingresar</h1>
-          <p>Accedé a Punto Pádel para encontrar canchas y reservar.</p>
+          <h1>Ingresa a nuestra web</h1>
+          <p>Accedé a Punto Pádel para encontrar canchas y reservar turnos.</p>
         </div>
       </header>
 
       <form class="form" @submit.prevent="onSubmit">
         <label class="field">
-          <span class="label">Usuario</span>
+          <span class="label">Usuario de acceso</span>
           <input
             v-model.trim="username"
             type="text"
-            placeholder="Ej: alejo"
+            placeholder="Ej: Tu nombre de usuario"
             autocomplete="username"
             required
           />
@@ -39,7 +39,7 @@
             </button>
           </div>
 
-          <small class="hint">Mínimo 4 caracteres.</small>
+          <small class="hint">La contraseña debe tener al menos 10 caracteres, debe de contener simbolos, numeros y mayusculas.</small>
         </label>
 
         <p v-if="error" class="error">{{ error }}</p>
@@ -76,14 +76,36 @@ export default {
       const p = this.password;
 
       // Validaciones simples (frontend)
-      if (!u || u.length < 3) {
-        this.error = "El usuario debe tener al menos 3 caracteres.";
-        return;
-      }
-      if (!p || p.length < 4) {
-        this.error = "La contraseña debe tener al menos 4 caracteres.";
-        return;
-      }
+     // Usuario
+if (!u || u.length < 3) {
+  this.error = "El usuario debe tener al menos 3 caracteres.";
+  return;
+}
+
+// Contraseña: mínimo 10 caracteres
+if (!p || p.length < 10) {
+  this.error = "La contraseña debe tener al menos 10 caracteres.";
+  return;
+}
+
+// Al menos una mayúscula
+if (!/[A-Z]/.test(p)) {
+  this.error = "La contraseña debe contener al menos una letra mayúscula.";
+  return;
+}
+
+// Al menos un número
+if (!/[0-9]/.test(p)) {
+  this.error = "La contraseña debe contener al menos un número.";
+  return;
+}
+
+// Al menos un símbolo
+if (!/[!@#$%^&*(),.?":{}|<>_\-+=]/.test(p)) {
+  this.error = "La contraseña debe contener al menos un símbolo.";
+  return;
+}
+
 
       // Simulamos un login real (luego se conecta al backend)
       this.loading = true;
